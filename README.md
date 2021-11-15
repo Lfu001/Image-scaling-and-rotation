@@ -3,20 +3,20 @@ Scales an image of any size to a specified size and rotates it by a specified an
 
 ## Functions
 ```py
-resize_img(fp: str, scale, interpolator="bilinear", rotation=0, rotate_fit: bool = True) -> ndarray
+resize_img(f: str, scale, interpolator="bilinear", rotation=0, rotate_fit: bool = True) -> ndarray
 ```
-Return a resized image by interporation.
+Return a resized image by interporation as ndarray.
 
 ### Parameters
-  - fp : A file name (string).  
-  - scale : float or tuple of float.  
-      - A scale factor of image enlarging/reducing.  
-  - interpolator : {"bilinear", "nearest"}, optional, default: "bilinear".  
-      - An algorithm for interpolating images.  
-  - rotation : float.  
-      - How much of an angle to rotate the image.  
-  - rotate_fit: bool.  
-      - Whether or not to rotate the image without sticking out.  
+  - f : Array-like object.
+  - scale : float or tuple of float.
+      - A scale factor of image enlarging/reducing.
+  - interpolator : {"bilinear", "nearest"}, optional, default: "bilinear".
+      - An algorithm for interpolating images.
+  - rotation : float.
+      - How much of an angle to rotate the image.
+  - rotate_fit: bool.
+      - Whether or not to rotate the image without sticking out.
     
 ---
 
