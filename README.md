@@ -21,6 +21,16 @@ Return a resized image by interporation.
 ---
 
 ```py
+load(fp: str) -> ndarry
+```
+Returns loaded image as ndarray.
+
+### Parameters
+  - fp : A file name (string).
+
+---
+
+```py
 save(obj, fp: str) -> None
 ```
 Saves array-like object as an image.
@@ -29,6 +39,12 @@ Saves array-like object as an image.
   - obj: Array-like object.
   - fp : A file name (string).
 
+## Example
+```py
+f = load("xxxxxx.jpg")
+g = resize_img(f, scale=1.5, interpolator="bilinear", rotation=30, rotate_fit=False)
+save(g, "yyyyyy.jpg")
+```
 
 ## Requirement
   - **NumPy**  
