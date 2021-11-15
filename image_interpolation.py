@@ -4,12 +4,12 @@ from time import time
 from PIL.Image import open, fromarray
 
 
-def resize_img(fp: str, scale, interpolator="bilinear", rotation=0, rotate_fit: bool = True):
-    """Return a resized image by interporation.
+def resize_img(f, scale, interpolator="bilinear", rotation=0, rotate_fit: bool = True):
+    """Returns a resized image by interporation as ndarray.
 
     Parameters
     ----------
-    fp : A file name (string).
+    f : Array-like object.
     scale : float or tuple of float.
         A scale factor of image enlarging/reducing.
     interpolator : {"bilinear", "nearest"}, optional, default: "bilinear".
@@ -47,11 +47,15 @@ def resize_img(fp: str, scale, interpolator="bilinear", rotation=0, rotate_fit: 
         e = "rotation " + e + " cannot be interpreted as an float."
         raise TypeError(e)
 
-    f = np.array(open(fp))
-    tmp_shape = (round(f.shape[0] * scale[0]), round(f.shape[1] * scale[1]), f.shape[2])
+    try:
+        f.shape[2]
+    except Exception:
+        tmp_shape = (round(f.shape[0] * scale[0]), round(f.shape[1] * scale[1]))
+    else:
+        tmp_shape = (round(f.shape[0] * scale[0]), round(f.shape[1] * scale[1]), f.shape[2])
 
     if rotation != 0:
-        center_tmp = np.array(tmp_shape[:-1]) // 2
+        center_tmp = np.array(tmp_shape[:2]) // 2
         corner = np.array([[0, 0] - center_tmp, [0, tmp_shape[1]] - center_tmp, [tmp_shape[0], 0] - center_tmp, [tmp_shape[0], tmp_shape[1]] - center_tmp])
         affine_rot = np.array([[math.cos(math.radians(rotation)), -math.sin(math.radians(rotation)), 0], [math.sin(math.radians(rotation)), math.cos(math.radians(rotation)), 0], [0, 0, 1]])
         inv_affine_rot = np.linalg.inv(affine_rot)
@@ -63,11 +67,11 @@ def resize_img(fp: str, scale, interpolator="bilinear", rotation=0, rotate_fit: 
             x_min = round(corner_rot[:, 0].min())
             y_max = round(corner_rot[:, 1].max())
             y_min = round(corner_rot[:, 1].min())
-            g = np.zeros((x_max - x_min + 1, y_max - y_min + 1, f.shape[2]), dtype=np.uint8)
+            g = np.zeros((x_max - x_min + 1, y_max - y_min + 1, tmp_shape[2]), dtype=np.uint8)
         else:
             g = np.zeros(tmp_shape, dtype=np.uint8)
 
-        center_g = np.array(g.shape[:-1]) // 2
+        center_g = np.array(g.shape[:2]) // 2
         affine_shift_g = np.array([[1, 0, -center_g[0]], [0, 1, -center_g[1]], [0, 0, 1]])
         affine_shift_back_tmp = np.array([[1, 0, center_tmp[0]], [0, 1, center_tmp[1]], [0, 0, 1]])
         affine_scale_back = np.array([[1 / scale[0], 0, 0], [0, 1 / scale[1], 0], [0, 0, 1]])
@@ -162,6 +166,17 @@ def resize_img(fp: str, scale, interpolator="bilinear", rotation=0, rotate_fit: 
     print(" {:.3f}s".format(time() - t_begin))
 
     return g
+
+
+def load(fp: str):
+    """Returns loaded image as ndarray.
+
+    Parameters
+    ----------
+    fp : A file name (string).
+
+    """
+    return np.array(open(fp))
 
 
 def save(obj, fp: str):
