@@ -3,7 +3,7 @@ Scales an image of any size to a specified size and rotates it by a specified an
 
 ## Functions
 ```py
-resize_img(f: str, scale, interpolator="bilinear", rotation=0, rotate_fit: bool = True) -> ndarray
+resize_img(f, scale, interpolator="bilinear", rotation=0, rotate_fit: bool = True) -> ndarray
 ```
 Return a resized image by interporation as ndarray.
 
